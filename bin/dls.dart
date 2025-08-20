@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
 import 'package:dls/src/dart_log_server.dart';
 
-const String dlsVersion = '0.0.1';
+const String dlsVersion = '0.0.2';
 
 ArgParser buildParser() {
   return ArgParser()
