@@ -41,7 +41,7 @@ void main(List<String> arguments) async {
       print('[VERBOSE] All arguments: ${results.arguments}');
     }
     final port = int.tryParse(results['port'] as String) ?? 8080;
-    await DartLogServer().start(port: port);
+    await DartLogServer().start(port: port,isVerbose: verbose);
   } on FormatException catch (e) {
     // Print usage information if an invalid argument was provided.
     print(e.message);

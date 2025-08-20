@@ -5,7 +5,8 @@ import 'dart:io';
 class DartLogServer {
   int retries = 0;
   static const int maxRetries = 3;
-  Future<void> start({required int port}) async {
+
+  Future<void> start({required int port, required bool isVerbose}) async {
     try {
       final server = await HttpServer.bind(InternetAddress.loopbackIPv4, port);
       print('Log server listening on http://${server.address.host}:${server.port}');
@@ -21,43 +22,48 @@ class DartLogServer {
         }
       }
     } catch (e) {
-      print('Error starting log server: $e');
       if (retries < maxRetries) {
         retries++;
-        print('Retrying to start server... Attempt $retries of $maxRetries');
-        await killProcessOnPort(port);
-        await start(port: port);
+        if (isVerbose) {
+          print('Retrying to start server... Attempt $retries of $maxRetries');
+        }
+        await _killProcessOnPort(port);
+        await start(port: port, isVerbose: isVerbose);
       } else {
-        print('Failed to start server after $maxRetries attempts.');
+        print('Failed to start server after $maxRetries attempts, $e. Exiting.');
       }
     }
   }
 
-  Future<void> killProcessOnPort(int port) async {
+  Future<void> _killProcessOnPort(int port, {bool isVerbose = false}) async {
     try {
-      // Find the process using the port
-      var result = await Process.run('lsof', ['-i', ':$port']);
-
-      if (result.exitCode != 0) {
-        print('No process found running on port $port.');
-        return;
+      // Find the process IDs using the port
+      final result = await Process.run('lsof', ['-ti', 'tcp:$port']);
+      if (isVerbose) {
+        if (result.exitCode != 0 || (result.stdout as String).trim().isEmpty) {
+          print('No process found running on port $port.');
+          return;
+        }
       }
 
-      // Extract the process ID (PID)
-      var lines = result.stdout.toString().split('\n');
-      if (lines.length > 1) {
-        var columns = lines[1].split(RegExp(r'\s+'));
-        if (columns.isNotEmpty) {
-          var pid = columns[1];
-          print('Killing process with PID: $pid');
+      final pids = (result.stdout as String).trim().split('\n');
 
-          // Kill the process
-          await Process.run('kill', ['-9', pid]);
+      for (final pid in pids) {
+        if (isVerbose) {
+          print('Killing process with PID: $pid');
+        }
+        await Process.run('kill', ['-9', pid]);
+        if (isVerbose) {
           print('Process $pid on port $port has been killed.');
         }
       }
+
+      // Small delay to let the OS release the port
+      await Future.delayed(const Duration(milliseconds: 500));
     } catch (e) {
-      print('Error: $e');
+      if (isVerbose) {
+        print('Error killing process on port $port: $e');
+      }
     }
   }
 }
