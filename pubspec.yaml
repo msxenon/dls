@@ -1,14 +1,13 @@
 name: dls
-description: A sample command-line application with basic argument parsing.
+description: A command-line interface (CLI) tool designed to simplify logging for Dart applications. It acts as a lightweight, local HTTP server that receives and displays log messages, offering an efficient alternative to traditional logging methods that can impact performance.
 version: 0.0.1
 repository: https://github.com/msxenon/dls
 
 environment:
-  sdk: ^3.9.0
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
-  args: ^2.7.0
+  args: ">=2.5.0 <3.0.0"
 
 dev_dependencies:
-  lints: ^6.0.0
-  test: ^1.25.6
+  lints: ">=5.0.0 <6.0.0"
