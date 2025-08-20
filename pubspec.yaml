@@ -6,6 +6,11 @@ repository: https://github.com/msxenon/dls
 environment:
   sdk: ">=3.3.0 <4.0.0"
 
+topics: 
+  - log
+  - server
+  - cli
+
 dependencies:
   args: ^2.5.0
 
