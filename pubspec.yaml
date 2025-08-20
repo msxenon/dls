@@ -1,6 +1,6 @@
 name: dls
 description: A command-line interface (CLI) tool designed to simplify logging for Dart applications. It acts as a lightweight, local HTTP server that receives and displays log messages, offering an efficient alternative to traditional logging methods that can impact performance.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/msxenon/dls
 
 environment:
@@ -16,3 +16,6 @@ dependencies:
 
 dev_dependencies:
   lints: ^5.0.0
+
+executables:
+  dls:
