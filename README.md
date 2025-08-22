@@ -1,4 +1,4 @@
-# **dls** 🪵
+# **dls (Dart Log Server)** 🪵
 
 **dls** is a command-line interface (CLI) tool and a local HTTP server designed to simplify logging for Dart applications. It provides an efficient and lightweight alternative to traditional logging methods, especially when dealing with a high volume of logs that might cause performance issues in an IDE or when writing to files.
 
